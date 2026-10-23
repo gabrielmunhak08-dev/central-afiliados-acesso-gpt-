@@ -1,0 +1,30 @@
+# Dados reais e imagens
+central.db
+central.db-*
+*.db
+*.db-*
+uploads/
+
+# Backups
+*.bak
+*.backup*
+app_backup*
+central_backup*
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Arquivos Python temporários
+__pycache__/
+*.py[cod]
+
+# Arquivos de sistema
+.DS_Store
+
+# Todas as versões antigas do app
+app.py.bak*
+atualizar_galeria.py
