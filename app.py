@@ -1,3 +1,4 @@
+from flask import session
 from flask import Flask, request, redirect, url_for, render_template_string, flash
 import sqlite3
 import os
@@ -10,6 +11,91 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("CENTRAL_SECRET_KEY", "troque-esta-chave-local")
+
+@app.before_request
+def require_login():
+    if request.endpoint in ("login", "logout"):
+        return None
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    erro = ""
+    if request.method == "POST":
+        usuario = request.form.get("username", "").strip()
+        senha = request.form.get("password", "")
+        usuario_correto = os.environ.get("CENTRAL_USERNAME", "1")
+        senha_correta = os.environ.get("CENTRAL_PASSWORD", "1")
+
+        if usuario == usuario_correto and senha == senha_correta:
+            session.clear()
+            session["logged_in"] = True
+            return redirect(url_for("index"))
+        erro = "Usuário ou senha incorretos."
+
+    return render_template_string("""
+    <!doctype html>
+    <html lang="pt-br">
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="utf-8">
+      <title>Login - Central de Afiliados</title>
+      <style>
+        * { box-sizing: border-box; }
+        body {
+          margin: 0; min-height: 100vh; display: grid;
+          place-items: center; padding: 20px;
+          background: #0b0d10; color: #f5f5f5;
+          font-family: Arial, sans-serif;
+        }
+        .card {
+          width: 100%; max-width: 380px; padding: 28px;
+          background: #15181d; border: 1px solid #30343b;
+          border-radius: 18px;
+        }
+        h1 { font-size: 24px; margin-top: 0; }
+        p { color: #aaa; }
+        label { display: block; margin: 18px 0 7px; }
+        input {
+          width: 100%; padding: 13px; border-radius: 9px;
+          border: 1px solid #3a3f47; background: #0b0d10;
+          color: white; font-size: 16px;
+        }
+        button {
+          width: 100%; margin-top: 22px; padding: 14px;
+          border: 0; border-radius: 9px; background: #ff6b00;
+          color: white; font-size: 16px; font-weight: bold;
+        }
+        .erro { color: #ff8585; }
+      </style>
+    </head>
+    <body>
+      <main class="card">
+        <h1>Central de Afiliados</h1>
+        <p>Entre para acessar seu painel.</p>
+        {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
+        <form method="post">
+          <label for="username">Usuário</label>
+          <input id="username" name="username" autocomplete="username"
+                 required>
+          <label for="password">Senha</label>
+          <input id="password" name="password" type="password"
+                 autocomplete="current-password" required>
+          <button type="submit">Entrar</button>
+        </form>
+      </main>
+    </body>
+    </html>
+    """, erro=erro)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
 
 STATUSES = ["Ideia", "Preparando", "Pronto", "Publicado", "Pausado"]
 FORMATS = ["Story", "Feed", "Reel", "Outro"]
@@ -153,7 +239,7 @@ table th, table td {
 
 </head><body>
 <header><div class="brand">🛍️ Central de Afiliado</div><p>Organize produtos, prepare conteúdos e planeje suas publicações.</p></header>
-<nav><a href="{{ url_for('index') }}">Painel</a><a href="{{ url_for('products') }}">Produtos</a><a href="{{ url_for('new_product') }}">+ Produto</a><a href="{{ url_for('posts') }}">Calendário</a><a href="{{ url_for('new_post') }}">+ Publicação</a><a href="{{ url_for('metrics') }}">Resultados</a></nav>
+<nav><a href="{{ url_for('index') }}">Painel</a><a href="{{ url_for('products') }}">Produtos</a><a href="{{ url_for('new_product') }}">+ Produto</a><a href="{{ url_for('posts') }}">Calendário</a><a href="{{ url_for('new_post') }}">+ Publicação</a><a href="{{ url_for('metrics') }}">Resultados</a><a href="{{ url_for('logout') }}">Sair</a></nav>
 <main>{% with messages = get_flashed_messages() %}{% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}{{ content|safe }}</main><footer>Central pessoal · V1 · Os dados ficam neste dispositivo até você fazer backup.</footer></body></html>
 """
 
