@@ -149,6 +149,77 @@ p, small, label, .muted {
 table th, table td {
   border-color: var(--border) !important;
 }
+
+/* VISUAL PREMIUM V2 */
+body {
+  background:
+    radial-gradient(ellipse at 50% -15%, #3b2417 0%, #111318 38%, #090b0e 75%) !important;
+  color: #f5f5f5 !important;
+}
+header {
+  background: linear-gradient(120deg, #1c2027, #111318) !important;
+  padding-top: 26px !important;
+  padding-bottom: 22px !important;
+  border-bottom: 1px solid #3a2a20 !important;
+}
+header .brand {
+  font-size: 24px !important;
+  letter-spacing: -.5px !important;
+}
+nav {
+  background: rgba(10, 12, 15, .97) !important;
+  padding: 12px !important;
+  border-bottom: 1px solid #292e36 !important;
+}
+nav a {
+  border-radius: 999px !important;
+  padding: 11px 15px !important;
+}
+main {
+  max-width: 900px !important;
+  padding-top: 26px !important;
+}
+.pagehead {
+  margin-bottom: 24px !important;
+}
+.pagehead h1 {
+  font-size: clamp(27px, 6vw, 34px) !important;
+  font-weight: 850 !important;
+  letter-spacing: -1px !important;
+}
+.sub {
+  font-size: 14px !important;
+}
+.card, .stat, .formcard {
+  background: linear-gradient(145deg, #191d24, #12151a) !important;
+  border: 1px solid #303641 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,.22) !important;
+  padding: 18px !important;
+}
+.stat strong {
+  color: #ff8a35 !important;
+}
+.itemtitle {
+  font-size: 19px !important;
+  line-height: 1.3 !important;
+}
+.btn, button {
+  border-radius: 12px !important;
+}
+.btn:not(.secondary), button:not(.secondary) {
+  background: linear-gradient(135deg, #ff8126, #f45100) !important;
+}
+.empty {
+  background: #14181e !important;
+  border-color: #45404a !important;
+  border-radius: 20px !important;
+}
+@media(max-width:420px) {
+  main { padding: 20px 12px 90px !important; }
+  .card, .stat, .formcard { padding: 15px !important; }
+}
+
 </style>
 
 </head><body>
