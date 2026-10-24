@@ -27,7 +27,7 @@ class CentralV2SmokeTests(unittest.TestCase):
     def test_dashboard_after_login(self):
         response = self.login()
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Painel de controle", response.data)
+        self.assertIn(b"PAINEL DE CONTROLE", response.data)
 
     def test_products_page_after_login(self):
         self.login()
