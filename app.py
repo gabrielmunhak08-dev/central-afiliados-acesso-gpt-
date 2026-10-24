@@ -193,9 +193,9 @@ def index():
 PRODUCT_FORM = """
 <div class="pagehead"><div><h1>{{ heading }}</h1><div class="sub">Cadastre os dados que você quer ter à mão ao criar uma divulgação.</div></div></div>
 <form class="formcard" method="post" enctype="multipart/form-data">
-  <label>Nome do produto *</label><input name="name" required value="{{ p['name'] if p else '' }}" placeholder="Ex.: Relógio esportivo">
+  <label>Nome do produto *</label><input name="name" autocomplete="off" required value="{{ p['name'] if p else '' }}" placeholder="Ex.: Relógio esportivo">
   <div class="formgrid"><div><label>Categoria</label><input name="category" value="{{ p['category'] if p else '' }}" placeholder="Casa, beleza, tecnologia..."></div><div><label>Preço exibido (R$)</label><input name="price" value="{{ p['price'] if p else '' }}" placeholder="Ex.: 49,90"></div></div>
-  <label>Link de afiliado</label><input name="affiliate_link" type="url" value="{{ p['affiliate_link'] if p else '' }}" placeholder="Cole o link gerado pela Shopee">
+  <label>Link de afiliado (cole aqui o link da Shopee)</label><input name="affiliate_link" id="affiliate_link" type="url" autocomplete="url" inputmode="url" value="{{ p['affiliate_link'] if p else '' }}" placeholder="https://...">
   <label>Comissão estimada (opcional)</label><input name="commission" value="{{ p['commission'] if p else '' }}" placeholder="Ex.: 5% ou R$ 2,50">
   <label>Foto principal (opcional)</label><input name="image" type="file" accept="image/*">
   <label>Fotos adicionais (até 9, total máximo de 10)</label>
