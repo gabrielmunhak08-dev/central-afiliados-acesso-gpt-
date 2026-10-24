@@ -1,5 +1,4 @@
-from flask import session
-from flask import Flask, request, redirect, url_for, render_template_string, flash
+from flask import Flask, request, redirect, url_for, render_template_string, flash, session
 import sqlite3
 import os
 from datetime import date
@@ -10,92 +9,7 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("CENTRAL_SECRET_KEY", "troque-esta-chave-local")
-
-@app.before_request
-def require_login():
-    if request.endpoint in ("login", "logout"):
-        return None
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    erro = ""
-    if request.method == "POST":
-        usuario = request.form.get("username", "").strip()
-        senha = request.form.get("password", "")
-        usuario_correto = os.environ.get("CENTRAL_USERNAME", "1")
-        senha_correta = os.environ.get("CENTRAL_PASSWORD", "1")
-
-        if usuario == usuario_correto and senha == senha_correta:
-            session.clear()
-            session["logged_in"] = True
-            return redirect(url_for("index"))
-        erro = "Usuário ou senha incorretos."
-
-    return render_template_string("""
-    <!doctype html>
-    <html lang="pt-br">
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta charset="utf-8">
-      <title>Login - Central de Afiliados</title>
-      <style>
-        * { box-sizing: border-box; }
-        body {
-          margin: 0; min-height: 100vh; display: grid;
-          place-items: center; padding: 20px;
-          background: #0b0d10; color: #f5f5f5;
-          font-family: Arial, sans-serif;
-        }
-        .card {
-          width: 100%; max-width: 380px; padding: 28px;
-          background: #15181d; border: 1px solid #30343b;
-          border-radius: 18px;
-        }
-        h1 { font-size: 24px; margin-top: 0; }
-        p { color: #aaa; }
-        label { display: block; margin: 18px 0 7px; }
-        input {
-          width: 100%; padding: 13px; border-radius: 9px;
-          border: 1px solid #3a3f47; background: #0b0d10;
-          color: white; font-size: 16px;
-        }
-        button {
-          width: 100%; margin-top: 22px; padding: 14px;
-          border: 0; border-radius: 9px; background: #ff6b00;
-          color: white; font-size: 16px; font-weight: bold;
-        }
-        .erro { color: #ff8585; }
-      </style>
-    </head>
-    <body>
-      <main class="card">
-        <h1>Central de Afiliados</h1>
-        <p>Entre para acessar seu painel.</p>
-        {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
-        <form method="post">
-          <label for="username">Usuário</label>
-          <input id="username" name="username" autocomplete="username"
-                 required>
-          <label for="password">Senha</label>
-          <input id="password" name="password" type="password"
-                 autocomplete="current-password" required>
-          <button type="submit">Entrar</button>
-        </form>
-      </main>
-    </body>
-    </html>
-    """, erro=erro)
-
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
-
+app.secret_key = os.environ.get("CENTRAL_SECRET_KEY", "central-afiliado-chave-local-trocar")
 
 STATUSES = ["Ideia", "Preparando", "Pronto", "Publicado", "Pausado"]
 FORMATS = ["Story", "Feed", "Reel", "Outro"]
@@ -172,22 +86,22 @@ def brdate(value):
         return value
 
 STYLE = """
-:root{--bg:#f5f6fa;--card:#fff;--ink:#1d2433;--muted:#667085;--line:#e4e7ec;--accent:#e65a22;--accent2:#fff0e9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{background:#202635;color:#fff;padding:18px 16px 14px}header .brand{font-size:21px;font-weight:800;letter-spacing:.2px}header p{margin:5px 0 0;color:#cbd0db;font-size:13px}
-nav{display:flex;gap:8px;overflow-x:auto;padding:11px 12px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
-nav a{white-space:nowrap;text-decoration:none;color:var(--ink);background:#f2f4f7;padding:9px 12px;border-radius:999px;font-size:13px;font-weight:650}
-main{max-width:960px;margin:0 auto;padding:16px 12px 36px}.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:6px 0 16px}.pagehead h1{font-size:23px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.stat,.card,.formcard{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:12px}.stat small{color:var(--muted);display:block}.stat strong{font-size:27px;display:block;margin-top:5px}.stat span{font-size:12px;color:var(--muted)}
-.btn,button{border:0;background:var(--accent);color:white;padding:11px 14px;border-radius:10px;font-weight:750;font-size:14px;text-decoration:none;display:inline-block;cursor:pointer}.btn.secondary,button.secondary{background:#eef0f4;color:#283142}.btn.danger,button.danger{background:#b42318}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}input,select,textarea{font:inherit;font-size:16px;width:100%;border:1px solid #cfd4dc;border-radius:10px;padding:11px;background:#fff;color:var(--ink)}textarea{min-height:86px;resize:vertical}.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 12px}
-.itemtitle{font-size:17px;font-weight:800;margin:0 0 5px}.muted{color:var(--muted);font-size:13px}.pill{display:inline-block;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:800;background:#f2f4f7;color:#344054}.pill.orange{background:var(--accent2);color:#b54708}.itemrow{display:flex;gap:12px;align-items:flex-start}.thumb{width:72px;height:72px;object-fit:cover;border-radius:10px;background:#f2f4f7;flex-shrink:0}.itembody{min-width:0;flex:1}.itembody a{overflow-wrap:anywhere}.empty{padding:25px;text-align:center;color:var(--muted);background:#fff;border:1px dashed #cfd4dc;border-radius:15px}.flash{padding:11px 13px;background:#ecfdf3;border:1px solid #abefc6;color:#067647;border-radius:10px;margin-bottom:12px}.tinyform{display:inline}.tinyform button{padding:8px 10px;font-size:12px}.sectiontitle{font-size:16px;margin:20px 0 10px}.kit{white-space:pre-wrap;background:#f8fafc;border:1px solid var(--line);padding:12px;border-radius:10px;font-size:14px;overflow-wrap:anywhere}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
-@media(min-width:700px){header{padding-left:max(18px,calc((100% - 936px)/2));padding-right:max(18px,calc((100% - 936px)/2))}nav{justify-content:center}}
+:root{color-scheme:dark;--bg:#0b0d10;--card:#15181d;--panel2:#1c222b;--ink:#e5e7eb;--muted:#9ca3af;--line:#303640;--accent:#ff6b00;--accent2:#3a2416}
+*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top,#171b22 0%,var(--bg) 48%);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+header{background:#111419;color:#fff;padding:20px 16px 16px;border-bottom:1px solid var(--line)}header .brand{font-size:21px;font-weight:850;letter-spacing:.2px}header p{margin:5px 0 0;color:#a1aab8;font-size:13px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;background:rgba(15,17,21,.97);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;scrollbar-width:thin;backdrop-filter:blur(12px)}nav a{white-space:nowrap;text-decoration:none!important;color:#cbd5e1!important;background:#1b2028;padding:10px 13px;border:1px solid #2b323d;border-radius:12px;font-size:13px;font-weight:700}nav a:hover{background:#332216;border-color:var(--accent);color:#ff9b52!important}
+main{max-width:1040px;margin:0 auto;padding:20px 14px 100px}.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:6px 0 18px;flex-wrap:wrap}.pagehead h1{font-size:clamp(22px,5vw,28px);letter-spacing:-.5px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat,.card,.formcard{background:linear-gradient(145deg,#171b21,#13161b);border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:12px;box-shadow:0 8px 24px rgba(0,0,0,.12)}.stat small{color:var(--muted);display:block;font-size:12px}.stat strong{font-size:clamp(25px,6vw,31px);display:block;margin-top:7px;letter-spacing:-.7px}.stat span{font-size:12px;color:var(--muted)}
+.btn,button{border:1px solid transparent;background:var(--accent);color:#fff!important;padding:11px 14px;border-radius:11px;font-weight:800;font-size:14px;text-decoration:none!important;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;min-height:42px;transition:transform .15s,filter .15s}.btn:hover,button:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn.secondary,button.secondary{background:#202630!important;color:#e5e7eb!important;border-color:#343c48!important;box-shadow:none}.btn.danger,button.danger{background:#7f1d1d!important;color:#fecaca!important}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+label{display:block;font-size:13px;font-weight:750;margin:14px 0 6px;color:#d8dee8}input,select,textarea{font:inherit;font-size:16px;width:100%;border:1px solid #343c48;border-radius:11px;padding:12px;background:var(--panel2);color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,0,.13)}input[type=file]{font-size:13px;padding:9px}textarea{min-height:92px;resize:vertical}.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 12px}
+.itemtitle{font-size:17px;font-weight:820;margin:0 0 6px;overflow-wrap:anywhere}.muted{color:var(--muted);font-size:13px;line-height:1.5}.pill{display:inline-block;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;background:#242a33;color:#d1d5db}.pill.orange{background:#3a2416;color:#ffb37b}.itemrow{display:flex;gap:12px;align-items:flex-start}.thumb{width:72px;height:72px;object-fit:cover;border-radius:12px;background:#202630;flex-shrink:0}.itembody{min-width:0;flex:1}.itembody a{overflow-wrap:anywhere;color:#ff9b52}.empty{padding:28px 18px;text-align:center;color:var(--muted);background:#14181e;border:1px dashed #3a424e;border-radius:16px}.flash{padding:12px 14px;background:#123021;border:1px solid #226b45;color:#86efac;border-radius:12px;margin-bottom:14px}.tinyform{display:inline}.tinyform button{padding:8px 10px;font-size:12px;min-height:36px}.sectiontitle{font-size:16px;margin:22px 0 11px}.kit{white-space:pre-wrap;background:#101318;border:1px solid var(--line);padding:14px;border-radius:12px;font-size:14px;overflow-wrap:anywhere}
+a{color:#ff9b52}p{line-height:1.55}footer{text-align:center;color:#788291;font-size:12px;padding:18px 16px 28px}
+@media(min-width:700px){header{padding-left:max(18px,calc((100% - 1000px)/2));padding-right:max(18px,calc((100% - 1000px)/2))}nav{justify-content:center}.grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}main{padding-left:20px;padding-right:20px}}
+@media(max-width:420px){main{padding:16px 10px 100px}.stat,.card,.formcard{padding:13px;border-radius:15px}.pagehead .btn{width:100%}.actions .btn,.actions button{flex:1 1 auto}}
 """
 
 LAYOUT = """
-<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#202635"><title>{{ title }} · Central Afiliado</title><style>""" + STYLE + """</style>
+<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b0d10"><title>{{ title }} · Central Afiliado</title><style>""" + STYLE + """</style>
 <style>
 :root {
   color-scheme: dark;
@@ -247,6 +161,32 @@ def page(title, template, **context):
     content = render_template_string(template, **context)
     return render_template_string(LAYOUT, title=title, content=content)
 
+LOGIN_USER = os.environ.get("CENTRAL_USERNAME", "1")
+LOGIN_PASSWORD = os.environ.get("CENTRAL_PASSWORD", "1")
+LOGIN_PAGE = """<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d10"><title>Entrar · Central de Afiliados</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0d10;color:#e5e7eb;font-family:system-ui,sans-serif;padding:18px;box-sizing:border-box}.box{width:100%;max-width:380px;background:#15181d;border:1px solid #303640;border-radius:20px;padding:24px;box-sizing:border-box}h1{font-size:24px;margin:0 0 6px}.muted{color:#9ca3af;font-size:13px;margin-bottom:20px}label{display:block;font-size:13px;margin:14px 0 6px}input{width:100%;box-sizing:border-box;padding:13px;border-radius:11px;border:1px solid #343c48;background:#1c222b;color:#fff;font-size:16px}button{width:100%;margin-top:18px;padding:13px;background:#ff6b00;color:#fff;border:0;border-radius:11px;font-size:15px;font-weight:800}.error{color:#fca5a5;font-size:13px}</style></head><body><form class="box" method="post"><h1>🛍️ Central de Afiliados</h1><div class="muted">Entre para continuar</div>{% if error %}<p class="error">{{ error }}</p>{% endif %}<label>Usuário</label><input name="username" autocomplete="username" required><label>Senha</label><input name="password" type="password" autocomplete="current-password" required><button type="submit">Entrar</button></form></body></html>"""
+
+@app.before_request
+def require_login():
+    if request.endpoint in ("login", "static"):
+        return None
+    if not session.get("authenticated"):
+        return redirect(url_for("login", next=request.path))
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = ""
+    if request.method == "POST":
+        if request.form.get("username", "") == LOGIN_USER and request.form.get("password", "") == LOGIN_PASSWORD:
+            session.clear()
+            session["authenticated"] = True
+            return redirect(request.args.get("next") or url_for("index"))
+        error = "Usuário ou senha incorretos."
+    return render_template_string(LOGIN_PAGE, error=error)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 @app.route("/")
 def index():
     with db() as conn:
@@ -279,9 +219,9 @@ def index():
 PRODUCT_FORM = """
 <div class="pagehead"><div><h1>{{ heading }}</h1><div class="sub">Cadastre os dados que você quer ter à mão ao criar uma divulgação.</div></div></div>
 <form class="formcard" method="post" enctype="multipart/form-data">
-  <label>Nome do produto *</label><input name="name" required value="{{ p['name'] if p else '' }}" placeholder="Ex.: Relógio esportivo">
+  <label>Nome do produto *</label><input name="name" autocomplete="off" required value="{{ p['name'] if p else '' }}" placeholder="Ex.: Relógio esportivo">
   <div class="formgrid"><div><label>Categoria</label><input name="category" value="{{ p['category'] if p else '' }}" placeholder="Casa, beleza, tecnologia..."></div><div><label>Preço exibido (R$)</label><input name="price" value="{{ p['price'] if p else '' }}" placeholder="Ex.: 49,90"></div></div>
-  <label>Link de afiliado</label><input name="affiliate_link" type="url" value="{{ p['affiliate_link'] if p else '' }}" placeholder="Cole o link gerado pela Shopee">
+  <label>Link de afiliado (cole aqui o link da Shopee)</label><input name="affiliate_link" id="affiliate_link" type="url" autocomplete="url" inputmode="url" value="{{ p['affiliate_link'] if p else '' }}" placeholder="https://...">
   <label>Comissão estimada (opcional)</label><input name="commission" value="{{ p['commission'] if p else '' }}" placeholder="Ex.: 5% ou R$ 2,50">
   <label>Foto principal (opcional)</label><input name="image" type="file" accept="image/*">
   <label>Fotos adicionais (até 9, total máximo de 10)</label>
