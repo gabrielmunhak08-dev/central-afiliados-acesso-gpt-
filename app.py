@@ -150,76 +150,120 @@ table th, table td {
   border-color: var(--border) !important;
 }
 
-/* VISUAL PREMIUM V2 */
+/* VISUAL PREMIUM V3 — hierarquia, navegação e cartões mobile */
+:root {
+  --bg: #090b0f;
+  --panel: #141922;
+  --panel2: #1c2430;
+  --text: #f5f7fb;
+  --muted: #a8b2c2;
+  --accent: #ff7417;
+  --border: #303947;
+}
+html { background: #090b0f !important; }
 body {
   background:
-    radial-gradient(ellipse at 50% -15%, #3b2417 0%, #111318 38%, #090b0e 75%) !important;
-  color: #f5f5f5 !important;
+    radial-gradient(ellipse at 50% -12%, rgba(255,116,23,.19), transparent 43%),
+    linear-gradient(180deg, #0e1219 0%, #090b0f 65%) !important;
+  color: var(--text) !important;
 }
 header {
-  background: linear-gradient(120deg, #1c2027, #111318) !important;
-  padding-top: 26px !important;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(115deg, #1b222d 0%, #10141b 72%) !important;
+  border-bottom: 1px solid rgba(255,116,23,.35) !important;
+  padding-top: 24px !important;
   padding-bottom: 22px !important;
-  border-bottom: 1px solid #3a2a20 !important;
 }
-header .brand {
-  font-size: 24px !important;
-  letter-spacing: -.5px !important;
+header:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 3px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #ff7417, #ffb36b, transparent 85%);
+  opacity: .8;
 }
+header .brand { font-size: clamp(22px, 5vw, 27px) !important; font-weight: 900 !important; letter-spacing: -.7px !important; }
+header p { max-width: 620px; line-height: 1.5; }
 nav {
-  background: rgba(10, 12, 15, .97) !important;
-  padding: 12px !important;
-  border-bottom: 1px solid #292e36 !important;
+  gap: 8px !important;
+  padding: 12px 10px !important;
+  background: rgba(8,10,14,.94) !important;
+  border-bottom: 1px solid #272e39 !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
 }
 nav a {
-  border-radius: 999px !important;
-  padding: 11px 15px !important;
-}
-main {
-  max-width: 900px !important;
-  padding-top: 26px !important;
-}
-.pagehead {
-  margin-bottom: 24px !important;
-}
-.pagehead h1 {
-  font-size: clamp(27px, 6vw, 34px) !important;
-  font-weight: 850 !important;
-  letter-spacing: -1px !important;
-}
-.sub {
-  font-size: 14px !important;
-}
-.card, .stat, .formcard {
-  background: linear-gradient(145deg, #191d24, #12151a) !important;
-  border: 1px solid #303641 !important;
-  border-radius: 20px !important;
-  box-shadow: 0 12px 32px rgba(0,0,0,.22) !important;
-  padding: 18px !important;
-}
-.stat strong {
-  color: #ff8a35 !important;
-}
-.itemtitle {
-  font-size: 19px !important;
-  line-height: 1.3 !important;
-}
-.btn, button {
   border-radius: 12px !important;
+  padding: 11px 14px !important;
+  background: #171d26 !important;
+  border-color: #2d3643 !important;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
 }
-.btn:not(.secondary), button:not(.secondary) {
-  background: linear-gradient(135deg, #ff8126, #f45100) !important;
+nav a:hover { background: #2b2019 !important; border-color: #ff7417 !important; transform: translateY(-1px); }
+main { max-width: 980px !important; padding-top: 28px !important; }
+.pagehead { align-items: center !important; margin: 4px 0 22px !important; }
+.pagehead h1 { font-size: clamp(26px, 6vw, 35px) !important; font-weight: 900 !important; letter-spacing: -1.1px !important; line-height: 1.12 !important; }
+.sub { color: #a8b2c2 !important; font-size: 14px !important; max-width: 650px; }
+.grid { gap: 12px !important; }
+.stat, .card, .formcard {
+  background: linear-gradient(145deg, #171e28 0%, #11161e 100%) !important;
+  border: 1px solid #303947 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,.22) !important;
+  padding: 17px !important;
 }
-.empty {
-  background: #14181e !important;
-  border-color: #45404a !important;
-  border-radius: 20px !important;
+.stat { position: relative; overflow: hidden; }
+.stat:before { content: ""; display: block; height: 2px; width: 42px; margin: -17px 0 14px; background: #ff7417; border-radius: 4px; }
+.stat strong { color: #ff9a50 !important; font-variant-numeric: tabular-nums; }
+.sectiontitle { font-size: 19px !important; font-weight: 850 !important; margin-top: 26px !important; }
+.itemtitle { font-size: 18px !important; line-height: 1.32 !important; overflow-wrap: anywhere; }
+.card .muted, .formcard .muted { line-height: 1.55; }
+.thumb { background: #0e131b !important; border: 1px solid #303947; }
+.btn, button, input[type="submit"] {
+  min-height: 44px;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
 }
-@media(max-width:420px) {
-  main { padding: 20px 12px 90px !important; }
-  .card, .stat, .formcard { padding: 15px !important; }
+.btn:not(.secondary), button:not(.secondary), input[type="submit"] {
+  background: linear-gradient(135deg, #ff8b36 0%, #f45b08 100%) !important;
+  box-shadow: 0 5px 14px rgba(244,91,8,.16);
 }
-
+.btn.secondary, button.secondary {
+  background: #202834 !important;
+  border: 1px solid #364252 !important;
+  color: #f1f5f9 !important;
+}
+input, select, textarea {
+  border-radius: 12px !important;
+  background: #101722 !important;
+  border-color: #354050 !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #ff7417 !important;
+  box-shadow: 0 0 0 3px rgba(255,116,23,.16) !important;
+}
+.empty { background: #121821 !important; border-color: #414b5a !important; border-radius: 18px !important; }
+.flash { border-radius: 13px !important; }
+a { overflow-wrap: anywhere; }
+footer { padding-bottom: 32px !important; color: #8793a4 !important; }
+@media (max-width: 520px) {
+  main { padding: 20px 12px 84px !important; }
+  header { padding: 21px 14px 19px !important; }
+  nav { justify-content: flex-start !important; }
+  nav a { padding: 10px 12px !important; font-size: 12px !important; }
+  .pagehead { align-items: stretch !important; }
+  .pagehead .btn { width: 100%; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 9px !important; }
+  .stat { padding: 13px !important; }
+  .stat:before { margin: -13px 0 12px; }
+  .stat strong { font-size: 25px !important; }
+  .card, .formcard { padding: 14px !important; }
+  .actions { gap: 7px !important; }
+  .actions .btn, .actions button { flex: 1 1 100%; }
+}
 </style>
 
 </head><body>
@@ -391,7 +435,6 @@ def new_product():
                     conn.execute("INSERT INTO product_images (product_id,filename) VALUES (?,?)", (product_id, extra))
                     saved += 1
         flash("Produto cadastrado com galeria de fotos.")
-        flash("Produto cadastrado.")
         return redirect(url_for("products"))
     return page("Novo produto", PRODUCT_FORM, heading="Cadastrar produto", p=None)
 
