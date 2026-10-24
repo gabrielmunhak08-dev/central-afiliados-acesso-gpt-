@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template_string, flash
+from flask import Flask, request, redirect, url_for, render_template_string, flash, session
 import sqlite3
 import os
 from datetime import date
@@ -9,7 +9,7 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("CENTRAL_SECRET_KEY", "troque-esta-chave-local")
+app.secret_key = os.environ.get("CENTRAL_SECRET_KEY", "central-afiliado-chave-local-trocar")
 
 STATUSES = ["Ideia", "Preparando", "Pronto", "Publicado", "Pausado"]
 FORMATS = ["Story", "Feed", "Reel", "Outro"]
@@ -153,7 +153,7 @@ table th, table td {
 
 </head><body>
 <header><div class="brand">🛍️ Central de Afiliado</div><p>Organize produtos, prepare conteúdos e planeje suas publicações.</p></header>
-<nav><a href="{{ url_for('index') }}">Painel</a><a href="{{ url_for('products') }}">Produtos</a><a href="{{ url_for('new_product') }}">+ Produto</a><a href="{{ url_for('posts') }}">Calendário</a><a href="{{ url_for('new_post') }}">+ Publicação</a><a href="{{ url_for('metrics') }}">Resultados</a></nav>
+<nav><a href="{{ url_for('index') }}">Painel</a><a href="{{ url_for('products') }}">Produtos</a><a href="{{ url_for('new_product') }}">+ Produto</a><a href="{{ url_for('posts') }}">Calendário</a><a href="{{ url_for('new_post') }}">+ Publicação</a><a href="{{ url_for('metrics') }}">Resultados</a><a href="{{ url_for('logout') }}">Sair</a></nav>
 <main>{% with messages = get_flashed_messages() %}{% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}{{ content|safe }}</main><footer>Central pessoal · V1 · Os dados ficam neste dispositivo até você fazer backup.</footer></body></html>
 """
 
@@ -161,6 +161,32 @@ def page(title, template, **context):
     content = render_template_string(template, **context)
     return render_template_string(LAYOUT, title=title, content=content)
 
+LOGIN_USER = os.environ.get("CENTRAL_USERNAME", "1")
+LOGIN_PASSWORD = os.environ.get("CENTRAL_PASSWORD", "1")
+LOGIN_PAGE = """<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d10"><title>Entrar · Central de Afiliados</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0d10;color:#e5e7eb;font-family:system-ui,sans-serif;padding:18px;box-sizing:border-box}.box{width:100%;max-width:380px;background:#15181d;border:1px solid #303640;border-radius:20px;padding:24px;box-sizing:border-box}h1{font-size:24px;margin:0 0 6px}.muted{color:#9ca3af;font-size:13px;margin-bottom:20px}label{display:block;font-size:13px;margin:14px 0 6px}input{width:100%;box-sizing:border-box;padding:13px;border-radius:11px;border:1px solid #343c48;background:#1c222b;color:#fff;font-size:16px}button{width:100%;margin-top:18px;padding:13px;background:#ff6b00;color:#fff;border:0;border-radius:11px;font-size:15px;font-weight:800}.error{color:#fca5a5;font-size:13px}</style></head><body><form class="box" method="post"><h1>🛍️ Central de Afiliados</h1><div class="muted">Entre para continuar</div>{% if error %}<p class="error">{{ error }}</p>{% endif %}<label>Usuário</label><input name="username" autocomplete="username" required><label>Senha</label><input name="password" type="password" autocomplete="current-password" required><button type="submit">Entrar</button></form></body></html>"""
+
+@app.before_request
+def require_login():
+    if request.endpoint in ("login", "static"):
+        return None
+    if not session.get("authenticated"):
+        return redirect(url_for("login", next=request.path))
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = ""
+    if request.method == "POST":
+        if request.form.get("username", "") == LOGIN_USER and request.form.get("password", "") == LOGIN_PASSWORD:
+            session.clear()
+            session["authenticated"] = True
+            return redirect(request.args.get("next") or url_for("index"))
+        error = "Usuário ou senha incorretos."
+    return render_template_string(LOGIN_PAGE, error=error)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 @app.route("/")
 def index():
     with db() as conn:
