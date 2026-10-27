@@ -98,6 +98,61 @@ label{display:block;font-size:13px;font-weight:750;margin:14px 0 6px;color:#d8de
 a{color:#ff9b52}p{line-height:1.55}footer{text-align:center;color:#788291;font-size:12px;padding:18px 16px 28px}
 @media(min-width:700px){header{padding-left:max(18px,calc((100% - 1000px)/2));padding-right:max(18px,calc((100% - 1000px)/2))}nav{justify-content:center}.grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}main{padding-left:20px;padding-right:20px}}
 @media(max-width:420px){main{padding:16px 10px 100px}.stat,.card,.formcard{padding:13px;border-radius:15px}.pagehead .btn{width:100%}.actions .btn,.actions button{flex:1 1 auto}}
+
+/* REDESIGN PREMIUM COMPLETO — somente apresentação visual */
+:root{color-scheme:dark;--bg:#080a0e;--card:#111720;--card2:#171f2a;--ink:#f4f7fb;--muted:#aab4c3;--line:#293443;--accent:#ff7417;--accent-soft:#3b2417}
+*{box-sizing:border-box}
+html{background:var(--bg)!important;scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 50% -14%,rgba(255,116,23,.17),transparent 43%),linear-gradient(180deg,#0c1118 0%,#080a0e 70%)!important;color:var(--ink)!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+header{position:relative;overflow:hidden;background:linear-gradient(115deg,#1a222d 0%,#10151d 72%)!important;border-bottom:1px solid rgba(255,116,23,.35)!important;padding:23px 16px 21px!important}
+header:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#ff7417,#ffb36b,transparent 85%)}
+header .brand{font-size:clamp(22px,5vw,29px)!important;font-weight:900!important;letter-spacing:-.8px!important;color:#fff}
+header p{color:#aeb9c8!important;font-size:13px;line-height:1.55}
+nav{display:flex;gap:8px!important;overflow-x:auto;padding:12px!important;background:rgba(8,10,14,.96)!important;border-bottom:1px solid #28313d!important;position:sticky;top:0;z-index:20;scrollbar-width:thin;backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+nav a{white-space:nowrap;text-decoration:none!important;color:#dbe3ed!important;background:#151c26!important;padding:11px 14px!important;border:1px solid #2c3746!important;border-radius:12px!important;font-size:13px;font-weight:750;transition:all .18s ease}
+nav a:hover,nav a:focus{background:#302117!important;border-color:var(--accent)!important;color:#ffb47c!important;transform:translateY(-1px)}
+main{max-width:1180px!important;margin:0 auto;padding:25px 16px 90px!important}
+.pagehead{display:flex;align-items:center;justify-content:space-between;gap:13px;margin:4px 0 22px!important;flex-wrap:wrap}
+.pagehead h1{font-size:clamp(25px,5.8vw,36px)!important;line-height:1.12;font-weight:900!important;letter-spacing:-1.1px!important;margin:0;color:#f8fafc}
+.sub{color:var(--muted)!important;font-size:14px!important;line-height:1.6;margin-top:7px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}
+.stat,.card,.formcard{position:relative;background:linear-gradient(145deg,#171f2a 0%,#10151d 100%)!important;border:1px solid #2d3948!important;border-radius:18px!important;padding:17px!important;margin-bottom:13px;box-shadow:0 12px 30px rgba(0,0,0,.2)!important;color:var(--ink)!important}
+.stat{overflow:hidden}
+.stat:before{content:"";display:block;width:42px;height:3px;background:var(--accent);border-radius:9px;margin:-17px 0 14px}
+.stat small{color:var(--muted)!important;font-size:12px!important;line-height:1.5}
+.stat strong{font-size:clamp(25px,5vw,32px)!important;display:block;margin-top:8px;color:#ff9a50!important;letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)!important}
+.sectiontitle{font-size:19px!important;font-weight:850!important;color:#f6f8fb;margin:25px 0 12px!important}
+.itemtitle{font-size:18px!important;font-weight:850!important;line-height:1.35;margin:0 0 7px!important;overflow-wrap:anywhere;color:#f6f8fb}
+.muted{color:var(--muted)!important;font-size:13px;line-height:1.55}
+.pill{display:inline-block;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;background:#252f3c;color:#dce5ef}
+.pill.orange{background:#3b2417;color:#ffb47c}
+.itemrow{display:flex;gap:13px;align-items:flex-start}
+.thumb{width:82px;height:82px;object-fit:contain;border-radius:13px;flex-shrink:0;background:#0c1118!important;border:1px solid #303b49}
+.itembody{min-width:0;flex:1}
+.itembody a{overflow-wrap:anywhere;color:#ffab6a!important}
+.btn,button{border:1px solid transparent!important;background:linear-gradient(135deg,#ff8c3d,#f45e08)!important;color:#fff!important;padding:11px 15px!important;border-radius:12px!important;font-weight:850!important;font-size:14px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none!important;box-shadow:0 5px 14px rgba(244,94,8,.15);transition:filter .15s,transform .15s}
+.btn:hover,button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.secondary,button.secondary{background:#202a37!important;color:#f1f5f9!important;border:1px solid #394657!important;box-shadow:none}
+.btn.danger,button.danger{background:#7f1d1d!important;color:#fecaca!important}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+label{display:block;font-size:13px;font-weight:800;margin:15px 0 7px;color:#dce4ee!important}
+input,select,textarea{font:inherit;font-size:16px;width:100%;border:1px solid #354151!important;border-radius:12px!important;padding:12px 13px;background:#0e151f!important;color:#f1f5f9!important;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(255,116,23,.15)!important}
+input[type=file]{font-size:13px;padding:9px}
+textarea{min-height:100px;resize:vertical}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 13px}
+.empty{padding:30px 18px;text-align:center;color:var(--muted)!important;background:#121923!important;border:1px dashed #3b4858!important;border-radius:18px!important;line-height:1.65}
+.flash{padding:13px 15px;background:#123021!important;border:1px solid #226b45!important;color:#9af0b7!important;border-radius:13px;margin-bottom:15px}
+.kit{white-space:pre-wrap;background:#0b1017!important;border:1px solid #2b3745!important;padding:15px;border-radius:13px;font-size:14px;overflow-wrap:anywhere;color:#eaf0f7}
+a{color:#ffab6a}
+p{line-height:1.6}
+table{width:100%;border-collapse:collapse}
+table th,table td{border-color:#303b49!important;padding:10px;text-align:left}
+footer{text-align:center;color:#8491a2!important;font-size:12px;padding:20px 16px 30px}
+@media(min-width:760px){header{padding-left:max(20px,calc((100% - 1140px)/2))!important;padding-right:max(20px,calc((100% - 1140px)/2))!important}nav{justify-content:center}.grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}main{padding-left:22px!important;padding-right:22px!important}}
+@media(max-width:520px){main{padding:19px 12px 84px!important}header{padding:21px 14px 19px!important}nav{justify-content:flex-start!important}nav a{padding:10px 12px!important;font-size:12px!important}.pagehead{align-items:stretch!important}.pagehead .btn{width:100%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.stat{padding:13px!important}.stat:before{margin:-13px 0 12px}.stat strong{font-size:25px!important}.card,.formcard{padding:14px!important}.itemrow{gap:10px}.thumb{width:68px;height:68px}.actions{gap:7px!important}.actions .btn,.actions button{flex:1 1 auto}.formgrid{grid-template-columns:1fr}}
+
 """
 
 LAYOUT = """
@@ -278,7 +333,18 @@ def page(title, template, **context):
 
 LOGIN_USER = os.environ.get("CENTRAL_USERNAME", "1")
 LOGIN_PASSWORD = os.environ.get("CENTRAL_PASSWORD", "1")
-LOGIN_PAGE = """<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d10"><title>Entrar · Central de Afiliados</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0d10;color:#e5e7eb;font-family:system-ui,sans-serif;padding:18px;box-sizing:border-box}.box{width:100%;max-width:380px;background:#15181d;border:1px solid #303640;border-radius:20px;padding:24px;box-sizing:border-box}h1{font-size:24px;margin:0 0 6px}.muted{color:#9ca3af;font-size:13px;margin-bottom:20px}label{display:block;font-size:13px;margin:14px 0 6px}input{width:100%;box-sizing:border-box;padding:13px;border-radius:11px;border:1px solid #343c48;background:#1c222b;color:#fff;font-size:16px}button{width:100%;margin-top:18px;padding:13px;background:#ff6b00;color:#fff;border:0;border-radius:11px;font-size:15px;font-weight:800}.error{color:#fca5a5;font-size:13px}</style></head><body><form class="box" method="post"><h1>🛍️ Central de Afiliados</h1><div class="muted">Entre para continuar</div>{% if error %}<p class="error">{{ error }}</p>{% endif %}<label>Usuário</label><input name="username" autocomplete="username" required><label>Senha</label><input name="password" type="password" autocomplete="current-password" required><button type="submit">Entrar</button></form></body></html>"""
+LOGIN_PAGE = """<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d10"><title>Entrar · Central de Afiliados</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0d10;color:#e5e7eb;font-family:system-ui,sans-serif;padding:18px;box-sizing:border-box}.box{width:100%;max-width:380px;background:#15181d;border:1px solid #303640;border-radius:20px;padding:24px;box-sizing:border-box}h1{font-size:24px;margin:0 0 6px}.muted{color:#9ca3af;font-size:13px;margin-bottom:20px}label{display:block;font-size:13px;margin:14px 0 6px}input{width:100%;box-sizing:border-box;padding:13px;border-radius:11px;border:1px solid #343c48;background:#1c222b;color:#fff;font-size:16px}button{width:100%;margin-top:18px;padding:13px;background:#ff6b00;color:#fff;border:0;border-radius:11px;font-size:15px;font-weight:800}.error{color:#fca5a5;font-size:13px}
+body{background:radial-gradient(ellipse at 50% 0%,rgba(255,116,23,.2),transparent 42%),linear-gradient(180deg,#0c1118,#080a0e)!important;color:#f4f7fb!important;padding:18px!important}
+.box{position:relative;width:100%;max-width:420px!important;background:linear-gradient(145deg,#19212c,#10151d)!important;border:1px solid #344151!important;border-radius:22px!important;padding:28px!important;box-shadow:0 24px 70px rgba(0,0,0,.45)!important}
+.box:before{content:"";display:block;width:54px;height:4px;background:linear-gradient(90deg,#ff7417,#ffb36b);border-radius:9px;margin-bottom:20px}
+h1{font-size:clamp(24px,6vw,30px)!important;line-height:1.2!important;font-weight:900!important;letter-spacing:-.8px!important;color:#fff!important}
+.muted{color:#aab4c3!important;line-height:1.55!important}
+label{color:#dce4ee!important;font-weight:800!important;margin:16px 0 7px!important}
+input{background:#0e151f!important;color:#f1f5f9!important;border:1px solid #354151!important;border-radius:12px!important;padding:13px!important;min-height:48px}
+input:focus{outline:none;border-color:#ff7417!important;box-shadow:0 0 0 3px rgba(255,116,23,.15)}
+button{background:linear-gradient(135deg,#ff8c3d,#f45e08)!important;border-radius:12px!important;min-height:48px!important;font-weight:850!important;box-shadow:0 6px 18px rgba(244,94,8,.2)}
+.error{background:#371b1c;border:1px solid #793136;border-radius:10px;padding:10px;color:#fecaca!important}
+</style></head><body><form class="box" method="post"><h1>🛍️ Central de Afiliados</h1><div class="muted">Entre para continuar</div>{% if error %}<p class="error">{{ error }}</p>{% endif %}<label>Usuário</label><input name="username" autocomplete="username" required><label>Senha</label><input name="password" type="password" autocomplete="current-password" required><button type="submit">Entrar</button></form></body></html>"""
 
 @app.before_request
 def require_login():
